@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Republik Nexus — Learning. Growth. Future.</title>
+<meta name="description" content="Republik Nexus is a community where members learn skating, chess, coding, and more — together.">
+<link rel="icon" type="image/png" href="assets/logo-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0D0B08;
+    --surface: #1B160F;
+    --surface-alt: #241D14;
+    --line: #332A1D;
+    --text: #F3EEE4;
+    --text-muted: #A79C89;
+    --skate: #FF6B5B;
+    --chess: #4C9EEB;
+    --code: #6EE7B7;
+    --nexus: #E0B458;
+    --nexus-bright: #F5D97A;
+    --radius: 14px;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3{ font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacing:-0.02em; }
+
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.75rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--text-muted);
+  }
+
+  a{ color:inherit; text-decoration:none; }
+
+  .wrap{ max-width:1120px; margin:0 auto; padding:0 24px; }
+
+  /* NAV */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(13,11,8,0.78);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:72px;
+  }
+  .logo{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700; font-size:1.05rem;
+    display:flex; align-items:center; gap:10px;
+    letter-spacing:0.01em;
+  }
+  .logo img{ height:30px; width:auto; display:block; }
+  .nav-links{ display:flex; gap:32px; font-size:0.92rem; color:var(--text-muted); }
+  .nav-links a:hover{ color:var(--text); }
+  .nav-cta{
+    padding:9px 18px; border-radius:999px;
+    background:var(--nexus); color:#1B160F; font-weight:600; font-size:0.88rem;
+  }
+
+  /* HERO */
+  header.hero{
+    position:relative;
+    min-height:100vh;
+    display:flex; align-items:center;
+    padding-top:72px;
+    overflow:hidden;
+  }
+  #network{
+    position:absolute; inset:0; width:100%; height:100%;
+    opacity:0.55;
+  }
+  .hero-content{ position:relative; z-index:2; max-width:680px; }
+  .hero-content h1{
+    font-size:clamp(2.4rem, 5.5vw, 4.2rem);
+    line-height:1.05;
+    margin:20px 0 22px;
+  }
+  .hero-content h1 span{ color:var(--nexus); }
+  .hero-content p{
+    font-size:1.1rem; color:var(--text-muted); max-width:520px; margin-bottom:34px;
+  }
+  .hero-ctas{ display:flex; gap:16px; flex-wrap:wrap; }
+  .btn-primary{
+    padding:14px 28px; border-radius:999px; background:var(--nexus); color:#1B160F;
+    font-weight:600; display:inline-block; transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 8px 24px rgba(224,180,88,0.35); }
+  .btn-secondary{
+    padding:14px 28px; border-radius:999px; border:1px solid var(--line); color:var(--text);
+    font-weight:500; display:inline-block; transition:border-color .2s ease;
+  }
+  .btn-secondary:hover{ border-color:var(--nexus); }
+
+  .scroll-hint{
+    position:absolute; bottom:32px; left:24px; z-index:2;
+    font-family:'JetBrains Mono', monospace; font-size:0.72rem; color:var(--text-muted);
+    display:flex; align-items:center; gap:10px;
+  }
+  .scroll-hint::after{
+    content:''; width:1px; height:36px; background:linear-gradient(var(--text-muted), transparent);
+    animation:scrollpulse 2s infinite;
+  }
+  @keyframes scrollpulse{ 0%,100%{opacity:0.3;} 50%{opacity:1;} }
+
+  /* SECTION generic */
+  section{ padding:120px 0; position:relative; }
+  .section-head{ max-width:640px; margin-bottom:56px; }
+  .section-head h2{ font-size:clamp(1.8rem, 3.5vw, 2.6rem); margin-top:14px; }
+  .section-head p{ color:var(--text-muted); margin-top:16px; font-size:1.05rem; }
+
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  /* ABOUT */
+  .about-grid{
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:64px; align-items:start;
+  }
+  .about-copy p{ color:var(--text-muted); margin-bottom:18px; font-size:1.02rem; }
+  .stat-list{ display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+  .stat{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:24px;
+  }
+  .stat .num{ font-family:'Space Grotesk', sans-serif; font-size:2rem; font-weight:700; color:var(--nexus); }
+  .stat .label{ color:var(--text-muted); font-size:0.85rem; margin-top:6px; }
+
+  /* DISCIPLINES */
+  .disc-grid{
+    display:grid; grid-template-columns:repeat(4, 1fr); gap:20px;
+  }
+  .disc-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:32px 24px; position:relative; overflow:hidden;
+    transition:transform .25s ease, border-color .25s ease;
+  }
+  .disc-card:hover{ transform:translateY(-6px); }
+  .disc-card::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    background:var(--accent);
+  }
+  .disc-card[data-tag="skate"]{ --accent: var(--skate); }
+  .disc-card[data-tag="chess"]{ --accent: var(--chess); }
+  .disc-card[data-tag="code"]{ --accent: var(--code); }
+  .disc-card[data-tag="more"]{ --accent: var(--nexus); }
+  .disc-icon{
+    width:44px; height:44px; border-radius:10px; background:var(--surface-alt);
+    display:flex; align-items:center; justify-content:center; margin-bottom:22px;
+    color:var(--accent);
+  }
+  .disc-card h3{ font-size:1.15rem; margin-bottom:10px; }
+  .disc-card p{ color:var(--text-muted); font-size:0.92rem; }
+
+  /* HOW IT WORKS */
+  .steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:32px; }
+  .step{ border-left:2px solid var(--line); padding-left:22px; }
+  .step .eyebrow{ color:var(--nexus); }
+  .step h3{ font-size:1.15rem; margin:10px 0 10px; }
+  .step p{ color:var(--text-muted); font-size:0.95rem; }
+
+  /* COMMUNITY / GALLERY */
+  .gallery-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:24px;
+  }
+  .gallery-card{
+    border-radius:var(--radius); overflow:hidden; border:1px solid var(--line);
+    background:var(--surface); position:relative;
+  }
+  .gallery-card img{
+    width:100%; height:360px; object-fit:cover; display:block;
+    filter:saturate(1.02);
+  }
+  .gallery-caption{
+    padding:18px 20px;
+  }
+  .gallery-caption .eyebrow{ color:var(--nexus); margin-bottom:6px; }
+  .gallery-caption p{ color:var(--text-muted); font-size:0.92rem; }
+
+  /* CONTACT */
+  .contact-panel{
+    background:var(--surface); border:1px solid var(--line); border-radius:20px;
+    padding:56px; display:grid; grid-template-columns:1fr 1fr; gap:56px;
+  }
+  .contact-info h2{ font-size:1.9rem; margin-bottom:16px; }
+  .contact-info p{ color:var(--text-muted); margin-bottom:28px; }
+  .contact-detail{ display:flex; align-items:center; gap:12px; margin-bottom:14px; font-size:0.95rem; }
+  .contact-detail .dot{ width:6px; height:6px; border-radius:50%; background:var(--nexus); }
+  .social-row{ display:flex; gap:14px; margin-top:28px; }
+  .social-row a{
+    width:38px; height:38px; border-radius:50%; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-size:0.8rem;
+    color:var(--text-muted); transition:border-color .2s, color .2s;
+  }
+  .social-row a:hover{ border-color:var(--nexus); color:var(--nexus); }
+
+  form{ display:flex; flex-direction:column; gap:16px; }
+  form label{ font-size:0.82rem; color:var(--text-muted); margin-bottom:6px; display:block; }
+  form input, form textarea, form select{
+    width:100%; background:var(--surface-alt); border:1px solid var(--line);
+    border-radius:10px; padding:12px 14px; color:var(--text); font-family:'Inter', sans-serif;
+    font-size:0.95rem;
+  }
+  form input:focus, form textarea:focus, form select:focus{
+    outline:none; border-color:var(--nexus);
+  }
+  form textarea{ min-height:110px; resize:vertical; }
+  form button{
+    margin-top:6px; padding:14px; border:none; border-radius:10px; cursor:pointer;
+    background:var(--nexus); color:#1B160F; font-weight:600; font-size:0.95rem;
+    transition:transform .2s ease;
+  }
+  form button:hover{ transform:translateY(-2px); }
+  .form-note{ font-size:0.78rem; color:var(--text-muted); margin-top:4px; }
+
+  /* FOOTER */
+  footer{
+    border-top:1px solid var(--line); padding:36px 0; margin-top:40px;
+  }
+  footer .wrap{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;
+  }
+  footer .foot-links{ display:flex; gap:24px; font-size:0.85rem; color:var(--text-muted); }
+  footer .copy{ font-size:0.82rem; color:var(--text-muted); }
+
+  @media (max-width: 900px){
+    .about-grid, .contact-panel, .gallery-grid{ grid-template-columns:1fr; }
+    .disc-grid{ grid-template-columns:1fr 1fr; }
+    .steps{ grid-template-columns:1fr; }
+    .nav-links{ display:none; }
+    .gallery-card img{ height:280px; }
+  }
+  @media (max-width: 560px){
+    .disc-grid{ grid-template-columns:1fr; }
+    .contact-panel{ padding:32px 22px; }
+    section{ padding:80px 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+    html{ scroll-behavior:auto; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo"><img src="assets/logo-icon.png" alt="Republik Nexus flame mark"> REPUBLIK NEXUS</div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#disciplines">Disciplines</a>
+      <a href="#community">Community</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a href="#contact" class="nav-cta">Join us</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <svg id="network" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div class="wrap hero-content">
+    <div class="eyebrow">Learning. Growth. Future.</div>
+    <h1>Where skating, chess, and code<span> connect.</span></h1>
+    <p>Republik Nexus brings people together to learn and grow — on the board, on the wheels, and in the codebase. One community, many skills, shared momentum.</p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn-primary">Get in touch</a>
+      <a href="#disciplines" class="btn-secondary">See what we offer</a>
+    </div>
+  </div>
+  <div class="scroll-hint">SCROLL</div>
+</header>
+
+<section id="about">
+  <div class="wrap about-grid">
+    <div class="about-copy reveal">
+      <div class="eyebrow">Who we are</div>
+      <h2 style="margin:14px 0 22px;">A place built on curiosity, not credentials</h2>
+      <p>Republik Nexus started as a simple idea: the same drive that gets you to land a trick, win an endgame, or ship working code is the same drive worth building a community around. We don't separate people by skill — we connect them by mindset.</p>
+      <p>Members show up to learn something new, teach what they know, and find people who take their craft seriously. No matter which discipline brought you in, you'll find more than one reason to stay.</p>
+    </div>
+    <div class="stat-list reveal">
+      <div class="stat"><div class="num">3+</div><div class="label">Core disciplines taught</div></div>
+      <div class="stat"><div class="num">100%</div><div class="label">Peer-led sessions</div></div>
+      <div class="stat"><div class="num">All</div><div class="label">Skill levels welcome</div></div>
+      <div class="stat"><div class="num">1</div><div class="label">Community, many crafts</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="disciplines">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">What you can learn</div>
+      <h2>Different crafts. Same community.</h2>
+      <p>Pick a discipline to start, or move between them — most members do.</p>
+    </div>
+    <div class="disc-grid">
+      <div class="disc-card reveal" data-tag="skate">
+        <div class="disc-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/><path d="M4 19h16M6 17l4-9h4l4 9"/></svg>
+        </div>
+        <h3>Skating</h3>
+        <p>From first pushes to landing new tricks, learn alongside members who spot you, film you, and celebrate the falls too.</p>
+      </div>
+      <div class="disc-card reveal" data-tag="chess">
+        <div class="disc-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v4M8 21h8M9 21c0-4 1-5 1-8H8c0-3 2-4 4-6 2 2 4 3 4 6h-2c0 3 1 4 1 8"/></svg>
+        </div>
+        <h3>Chess</h3>
+        <p>Sharpen your openings, drill tactics, and play real games with members who'll actually explain why that move worked.</p>
+      </div>
+      <div class="disc-card reveal" data-tag="code">
+        <div class="disc-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 9l-4 4 4 4M16 9l4 4-4 4M13 5l-2 15"/></svg>
+        </div>
+        <h3>Coding</h3>
+        <p>Build real projects with people at your level, get your code reviewed, and learn the parts tutorials skip.</p>
+      </div>
+      <div class="disc-card reveal" data-tag="more">
+        <div class="disc-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        </div>
+        <h3>+ More skills</h3>
+        <p>The community keeps growing. If members want to teach it and others want to learn it, there's room for it here.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">How it works</div>
+      <h2>Getting involved is simple</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="eyebrow">01</div>
+        <h3>Reach out</h3>
+        <p>Send us a message with what you're interested in learning — or teaching. We'll point you to the right group.</p>
+      </div>
+      <div class="step reveal">
+        <div class="eyebrow">02</div>
+        <h3>Show up</h3>
+        <p>Join a session, meet other members, and get a feel for how the community runs. No pressure, no prerequisites.</p>
+      </div>
+      <div class="step reveal">
+        <div class="eyebrow">03</div>
+        <h3>Keep building</h3>
+        <p>Practice, play, and ship — with people around you doing the same. Progress sticks when it's shared.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="community">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Our community</div>
+      <h2>Real members, real progress</h2>
+      <p>A look at the people behind Republik Nexus — learning together and celebrating what they've built.</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-card reveal">
+        <img src="assets/team-outdoor.jpg" alt="Republik Nexus members and an instructor standing together outdoors">
+        <div class="gallery-caption">
+          <div class="eyebrow">On the ground</div>
+          <p>Members and mentors together between sessions — one community, all ages.</p>
+        </div>
+      </div>
+      <div class="gallery-card reveal">
+        <img src="assets/team-certificates.jpg" alt="Republik Nexus members holding completion certificates with their instructors">
+        <div class="gallery-caption">
+          <div class="eyebrow">Milestones</div>
+          <p>Members showing off certificates after completing a Republik Nexus program.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-panel reveal">
+      <div class="contact-info">
+        <div class="eyebrow">Get in touch</div>
+        <h2>Let's connect</h2>
+        <p>Have a question, want to join a session, or curious what Republik Nexus is about? Send us a message — a real member will get back to you.</p>
+        <div class="contact-detail"><span class="dot"></span> hello@republiknexus.org</div>
+        <div class="contact-detail"><span class="dot"></span> Based in Kisumu, Kenya</div>
+        <div class="social-row">
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="X / Twitter">X</a>
+          <a href="#" aria-label="WhatsApp">WA</a>
+        </div>
+      </div>
+      <form action="https://formspree.io/f/your-form-id" method="POST">
+        <div>
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" placeholder="Your name" required>
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required>
+        </div>
+        <div>
+          <label for="interest">What are you interested in?</label>
+          <select id="interest" name="interest">
+            <option>Skating</option>
+            <option>Chess</option>
+            <option>Coding</option>
+            <option>Something else</option>
+          </select>
+        </div>
+        <div>
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Tell us a bit about yourself..." required></textarea>
+        </div>
+        <button type="submit">Send message</button>
+        <div class="form-note">This form uses Formspree (free). Replace "your-form-id" with your own — see the note below.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="logo"><img src="assets/logo-icon.png" alt="Republik Nexus flame mark"> REPUBLIK NEXUS</div>
+    <div class="foot-links">
+      <a href="#about">About</a>
+      <a href="#disciplines">Disciplines</a>
+      <a href="#community">Community</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="copy">&copy; 2026 Republik Nexus. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el=>io.observe(el));
+
+  // Hero network animation
+  (function(){
+    const svg = document.getElementById('network');
+    const NS = 'http://www.w3.org/2000/svg';
+    const W = 1200, H = 800;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const anchors = [
+      { x: 260, y: 220, color: 'var(--skate)', label:'skate' },
+      { x: 620, y: 520, color: 'var(--chess)', label:'chess' },
+      { x: 950, y: 260, color: 'var(--code)', label:'code' }
+    ];
+
+    const nodes = [];
+    for(let i=0;i<26;i++){
+      nodes.push({
+        x: Math.random()*W,
+        y: Math.random()*H,
+        r: 1.6 + Math.random()*1.8
+      });
+    }
+
+    const linesGroup = document.createElementNS(NS,'g');
+    svg.appendChild(linesGroup);
+
+    function dist(a,b){ return Math.hypot(a.x-b.x, a.y-b.y); }
+
+    const allPts = nodes.concat(anchors);
+    allPts.forEach((p, i)=>{
+      allPts.forEach((q, j)=>{
+        if(j<=i) return;
+        const d = dist(p,q);
+        if(d < 190){
+          const line = document.createElementNS(NS,'line');
+          line.setAttribute('x1', p.x); line.setAttribute('y1', p.y);
+          line.setAttribute('x2', q.x); line.setAttribute('y2', q.y);
+          line.setAttribute('stroke', '#3A311F');
+          line.setAttribute('stroke-width', '1');
+          line.setAttribute('opacity', Math.max(0.05, 0.35 - d/600));
+          linesGroup.appendChild(line);
+        }
+      });
+    });
+
+    nodes.forEach(n=>{
+      const c = document.createElementNS(NS,'circle');
+      c.setAttribute('cx', n.x); c.setAttribute('cy', n.y); c.setAttribute('r', n.r);
+      c.setAttribute('fill', '#5A4E36');
+      svg.appendChild(c);
+    });
+
+    anchors.forEach(a=>{
+      const glow = document.createElementNS(NS,'circle');
+      glow.setAttribute('cx', a.x); glow.setAttribute('cy', a.y); glow.setAttribute('r', 26);
+      glow.setAttribute('fill', a.color);
+      glow.setAttribute('opacity', '0.12');
+      svg.appendChild(glow);
+
+      const c = document.createElementNS(NS,'circle');
+      c.setAttribute('cx', a.x); c.setAttribute('cy', a.y); c.setAttribute('r', 6);
+      c.setAttribute('fill', a.color);
+      svg.appendChild(c);
+
+      if(!reduceMotion){
+        const pulse = document.createElementNS(NS,'circle');
+        pulse.setAttribute('cx', a.x); pulse.setAttribute('cy', a.y); pulse.setAttribute('r', 6);
+        pulse.setAttribute('fill', 'none');
+        pulse.setAttribute('stroke', a.color);
+        pulse.setAttribute('stroke-width', '1.5');
+        pulse.innerHTML = `<animate attributeName="r" from="6" to="34" dur="2.8s" begin="${Math.random()*2}s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.6" to="0" dur="2.8s" begin="${Math.random()*2}s" repeatCount="indefinite"/>`;
+        svg.appendChild(pulse);
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>
